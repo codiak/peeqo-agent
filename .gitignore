@@ -1,0 +1,5 @@
+.DS_Store
+logs/
+
+# Internal/planning docs — kept locally for Claude Code context but not published
+_dev/

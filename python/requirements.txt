@@ -1,0 +1,18 @@
+# Python dependencies for Peeqo wakeword detection
+# Install on Raspberry Pi (32-bit ARM / armv7l):
+#
+#   1. Install system dependency for numpy:
+#        sudo apt install -y libopenblas-dev
+#
+#   2. Install onnxruntime from community ARM wheel (no PyPI wheel exists for armv7l):
+#        pip3 install "https://github.com/nknytk/built-onnxruntime-for-raspberrypi-linux/raw/master/wheels/bullseye/onnxruntime-1.16.0-cp39-cp39-linux_armv7l.whl"
+#
+#   3. Install remaining dependencies:
+#        pip3 install -r python/requirements.txt
+#
+# On 64-bit ARM (arm64) or x86, onnxruntime installs normally from PyPI and
+# step 2 can be skipped — just run: pip3 install -r python/requirements.txt
+
+openwakeword
+numpy<2  # onnxruntime 1.16.x (required on armv7l) was compiled against NumPy 1.x API
+yt-dlp   # YouTube URL resolution for video playback

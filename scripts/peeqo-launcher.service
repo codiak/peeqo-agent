@@ -1,0 +1,15 @@
+[Unit]
+Description=Peeqo button launcher (GPIO 16 → launch app)
+After=multi-user.target
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/peeqo/python/btn_launcher.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
