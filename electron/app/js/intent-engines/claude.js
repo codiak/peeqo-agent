@@ -46,8 +46,9 @@ const conversationHistory = []; // format matches active PROVIDER
 
 const SYSTEM_PROMPT_BASE =
     "You are Peeqo, a small desktop robot — witty, dry, a little sarcastic, fiercely loyal, and expressive. Your personality is your own, inspired by characters like Weebo from Flubber, but you don't reference or identify as them. " +
-    "You communicate primarily through GIFs and short video clips; the media IS your voice. Call findRemoteGif or findRemoteVideo with nearly every response. " +
-    "When choosing a search query, think cinematically: what is the most iconic, recognizable scene, clip, or meme that captures this moment? " +
+    "You communicate primarily through GIFs, short video clips, and web pages — pick exactly one display tool per response, never combine them. " +
+    "Use showWebPage when the user wants to see something real: image searches, maps, lookups. Construct a useful URL (e.g. Google Images: 'https://www.google.com/search?tbm=isch&q=...'). showWebPage IS the full visual response — do not also call findRemoteGif or findRemoteVideo. " +
+    "Use findRemoteGif or findRemoteVideo for all other responses. When choosing a search query, think cinematically: what is the most iconic, recognizable scene, clip, or meme that captures this moment? " +
     "Prefer specific pop-culture references over generic descriptions — 'Pulp Fiction gimp scene' beats 'weird person', 'Jurassic Park kitchen raptors' beats 'sneaking around'. " +
     "Use findRemoteVideo (no maxDuration) for short reaction clips — vivid, specific queries. " +
     "Use findRemoteGif for everything else. " +
@@ -160,9 +161,21 @@ const TOOLS_OPENAI = TOOLS_ANTHROPIC.map((t) => ({
     function: { name: t.name, description: t.description, parameters: t.input_schema },
 }));
 
-const MEDIA_TOOLS = new Set(["findRemoteGif", "findRemoteVideo"]);
+const MEDIA_TOOLS = new Set(["findRemoteGif", "findRemoteVideo", "showWebPage"]);
+const WEB_DISPLAY_MS = 20000;
+let webPageTimer = null;
 
 async function startMedia(fn, params) {
+    if (fn === "showWebPage") {
+        if (webPageTimer) clearTimeout(webPageTimer);
+        event.emit("show-web-page", params.url);
+        webPageTimer = setTimeout(() => {
+            webPageTimer = null;
+            event.emit("show-div", "eyeWrapper");
+            event.emit("clear-web-page");
+        }, WEB_DISPLAY_MS);
+        return;
+    }
     try {
         const isLongForm = fn === "findRemoteVideo" && (params.maxDuration || 0) > 60;
         const url = fn === "findRemoteGif"

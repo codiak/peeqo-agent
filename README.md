@@ -14,6 +14,7 @@ A desktop robot that listens for a wakeword, transcribes your speech, and respon
 3. An LLM agent (Claude via Anthropic API or OpenRouter) decides how to respond using tools:
    - `findRemoteGif` — searches Giphy and displays an MP4-backed GIF
    - `findRemoteVideo` — searches YouTube and streams a short clip (or full music video)
+   - `showWebPage` — displays a web page full-screen, e.g. Google Image search *(beta)*
    - `getWeather` — fetches current conditions via OpenWeather
    - `setTimer` — countdown timer with GIF response
    - `changeGlasses` — cycles Peeqo's glasses

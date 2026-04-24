@@ -85,10 +85,27 @@ module.exports = () => {
 	// passes id of div to show
 	event.on('show-div', common.showDiv)
 
+	const webview = document.getElementById('webView')
+	let currentWebUrl = null
+
+	webview.addEventListener('did-fail-load', (e) => {
+		if (e.errorCode === -3) return // ERR_ABORTED — previous page cancelled by new navigation, ignore
+		if (e.validatedURL !== currentWebUrl) return // stale failure from a superseded request, ignore
+		console.error(`[webview] failed to load (${e.errorCode}): ${e.errorDescription}`)
+		currentWebUrl = null
+		common.showDiv('eyeWrapper')
+		webview.loadURL('about:blank')
+	})
+
 	event.on('show-web-page', (url) => {
-		const webview = document.getElementById('webView')
+		currentWebUrl = url
 		webview.src = url
 		common.showDiv('webWrapper')
+	})
+
+	event.on('clear-web-page', () => {
+		currentWebUrl = null
+		webview.loadURL('about:blank')
 	})
 
 

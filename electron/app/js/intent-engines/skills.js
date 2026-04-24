@@ -29,13 +29,6 @@ function setTimer({ amount, unit }) {
     timer.startTimer()
 }
 
-const WEB_DISPLAY_MS = 8000
-
-function showWebPage({ url }) {
-    event.emit('show-web-page', url)
-    setTimeout(() => event.emit('show-div', 'eyeWrapper'), WEB_DISPLAY_MS)
-}
-
 function saveMemory({ key, content }) {
     try {
         if (!fs.existsSync(MEMORIES_DIR)) fs.mkdirSync(MEMORIES_DIR, { recursive: true })
@@ -49,4 +42,4 @@ function saveMemory({ key, content }) {
     }
 }
 
-module.exports = { changeGlasses, confused, getWeather, setTimer, cameraOn, cameraOff, takePhoto, showWebPage, saveMemory }
+module.exports = { changeGlasses, confused, getWeather, setTimer, cameraOn, cameraOff, takePhoto, saveMemory }
