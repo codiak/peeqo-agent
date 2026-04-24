@@ -1,9 +1,11 @@
-# Peeqo
+# Peeqo Agent
 
 A desktop robot that listens for a wakeword, transcribes your speech, and responds through GIFs, short video clips, servo movements, and LED animations. Powered by an LLM agent that picks media and text in real time.
 
+Peeqo Agent is a fork of @shekit's original [Peeqo app code](https://github.com/shekit/peeqo) with a lot of updates to replace defunct APIs and now support LLMs. It is an active work in progress, hop in the [Discord](bit.ly/2HLtxez) if you have questions or want to contribute!
+
 **Target hardware:** Raspberry Pi 3B running Pi OS Bullseye (11), with a Seeed 2-mic voicecard (WM8960).  
-**Dev machines:** Mac or Linux (DevTools open automatically; wakeword button replaces mic detector on unsupported platforms).
+**Dev machines:** Mac or Linux.
 
 ---
 
@@ -11,15 +13,20 @@ A desktop robot that listens for a wakeword, transcribes your speech, and respon
 
 1. Wakeword detected (openWakeWord / Python subprocess) → alert sound + servo wiggle
 2. Google Cloud Speech-to-Text transcribes your speech via a streaming gRPC connection
-3. An LLM agent (Claude via Anthropic API or OpenRouter) decides how to respond using tools:
+3. Your message is transcribed and passed to a simple agent loop which includes extra context for the LLM to decide what to do
+4. An LLM agent (Claude via Anthropic API or OpenRouter) decides how to respond using tools:
    - `findRemoteGif` — searches Giphy and displays an MP4-backed GIF
    - `findRemoteVideo` — searches YouTube and streams a short clip (or full music video)
-   - `showWebPage` — displays a web page full-screen, e.g. Google Image search *(beta)*
+   - `showWebPage` — displays a web page full-screen, e.g. Google Image search, Fast.com speed test *(beta)*
    - `getWeather` — fetches current conditions via OpenWeather
    - `setTimer` — countdown timer with GIF response
    - `changeGlasses` — cycles Peeqo's glasses
-4. Media plays on screen; mic is paused during playback and re-armed afterward
-5. Long videos (music, background play) are interruptible — say the wakeword to pause, speak a command or stay silent to resume
+5. A rolling history of your conversation is maintained so you can follow up on requests or expand on things
+
+Notes:
+- Media plays on screen; mic is paused during playback and re-armed afterward
+- Long videos (music, background play) are interruptible — say the wakeword to pause, speak a command or stay silent to resume
+- The "1" button on top of Peeqo can be used to reset at any time, including to close media
 
 ---
 
@@ -43,6 +50,7 @@ brew install yt-dlp    # YouTube URL resolution
 
 ### Raspberry Pi
 
+You will need to be running Raspberry Pi OS Bullseye (v11), and install the following packages:
 ```bash
 sudo apt install -y libopenblas-dev fonts-noto sox   # sox needed for WM8960 16kHz resampling
 pip3 install yt-dlp                                  # YouTube URL resolution
@@ -70,7 +78,14 @@ If you built Peeqo using the [original assembly guide](https://github.com/shekit
 
 ### 1 — Upgrade Pi OS to Bullseye
 
-The target OS is **Pi OS Bullseye (11)**, which ships Python 3.9 (required for the armv7l onnxruntime wheel). A clean flash is the most reliable path:
+The target OS is **Pi OS Bullseye (11)**, which ships Python 3.9 (required for the armv7l onnxruntime wheel). 
+
+## Option A: Upgrade version by version
+Run `apt update && apt full-upgrade` on the current version, update /etc/apt/sources.list to the next release codename, then `apt update && apt dist-upgrade`. Repeat for each version. You may still run into dependency issues that you'll need to resolve, but I managed with the help of Claude.
+
+
+## Option B: Flash the image
+A clean flash is the probably the most reliable path:
 
 1. Download [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 2. Choose **Raspberry Pi OS (Legacy, 32-bit)** — select the "Bullseye" release
