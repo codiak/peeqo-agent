@@ -4,6 +4,11 @@ A desktop robot that listens for a wakeword, transcribes your speech, and respon
 
 Peeqo Agent is a fork of @shekit's original [Peeqo app code](https://github.com/shekit/peeqo) with a lot of updates to replace defunct APIs and now support LLMs. It is an active work in progress, hop in the [Discord](bit.ly/2HLtxez) if you have questions or want to contribute!
 
+Major changes from the original code:
+- Wakeword support for "Peeqo" is included in the repo and uses [OpenWakeWord](https://github.com/dscripka/openWakeWord)
+- Google's speech-to-text + LLM response replaces the old, strict conditional intent flow
+- "Intents" have now become "tools" that the LLM can choose to use
+
 **Target hardware:** Raspberry Pi 3B running Pi OS Bullseye (11), with a Seeed 2-mic voicecard (WM8960).  
 **Dev machines:** Mac or Linux.
 
