@@ -304,7 +304,9 @@ async function handleTranscript({ text }) {
     conversationHistory.push({ role: "user", content: text });
     trimHistory();
 
-    const systemPrompt = SYSTEM_PROMPT_BASE + loadMemories();
+    const now = new Date();
+    const dateTimeContext = `\n\nCurrent date and time: ${now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}, ${now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}.`;
+    const systemPrompt = SYSTEM_PROMPT_BASE + dateTimeContext + loadMemories();
 
     try {
         const pendingMediaRef = { value: null };
