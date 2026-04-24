@@ -1,4 +1,4 @@
-# Peeqo Agent
+# Peeqo Agent [beta]
 
 A desktop robot that listens for a wakeword, transcribes your speech, and responds through GIFs, short video clips, servo movements, and LED animations. Powered by an LLM agent that picks media and text in real time.
 
