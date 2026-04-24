@@ -85,6 +85,12 @@ module.exports = () => {
 	// passes id of div to show
 	event.on('show-div', common.showDiv)
 
+	event.on('show-web-page', (url) => {
+		const webview = document.getElementById('webView')
+		webview.src = url
+		common.showDiv('webWrapper')
+	})
+
 
 	// POWER CONTROL
 	event.on('shutdown', power.shutdown)

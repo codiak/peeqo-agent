@@ -12,7 +12,7 @@ function showDiv(id){
 	// Hides all divs in majorDivs array and shows div passed as param
 	// @param {string} id - id of div to show
 	
-	const majorDivs = ["eyeWrapper", "cameraWrapper", "gifWrapper", "pictureWrapper", "videoWrapper"]
+	const majorDivs = ["eyeWrapper", "cameraWrapper", "gifWrapper", "pictureWrapper", "videoWrapper", "webWrapper"]
 
 	if(!majorDivs.includes(id)){
 		console.error(`Div with id ${id} is not included in array`)

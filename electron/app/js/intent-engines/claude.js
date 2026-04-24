@@ -131,6 +131,17 @@ const TOOLS_ANTHROPIC = [
         input_schema: { type: "object", properties: {} },
     },
     {
+        name: "showWebPage",
+        description: "Display a web page full-screen for a few seconds. Use for image searches, maps, or any visual lookup — e.g. Google Image search for 'cats in hats'. Prefer specific search URLs over bare homepages.",
+        input_schema: {
+            type: "object",
+            properties: {
+                url: { type: "string", description: "Full URL to display, e.g. 'https://www.google.com/search?tbm=isch&q=cats+in+hats'" },
+            },
+            required: ["url"],
+        },
+    },
+    {
         name: "saveMemory",
         description: "Persist a fact about the user for future conversations. Use a short snake_case key and a single concise sentence (≤20 words). Overwrites any existing memory with the same key.",
         input_schema: {
